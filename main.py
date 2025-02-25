@@ -21,7 +21,6 @@ def enviar_mensagem():
         chat_area.insert(tk.END, "Chatbot: Até logo! \n")
         janela.quit() #Fecha a aplicação
     else:
-        chat_area.insert(tk.END, "Chatbot: 👋 Olá! Como posso ajudar você hoje?\n")
         chat_area.insert(tk.END, "Você: " + user_input  + "\n")
         resposta = chat.send_message(user_input).text
         chat_area.insert(tk.END, "Chatbot: " + resposta + "\n")
