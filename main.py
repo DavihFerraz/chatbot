@@ -1,21 +1,37 @@
 import google.generativeai as genai
+import tkinter as tk
+from tkinter import scrolledtext
 
-# Defina sua chave da API
-genai.configure(api_key="AIzaSyD_TgVBvX5B9REpxNx7IUlf1mpLtH_1MF4")
+# Configure a API Key
+API_KEY = "AIzaSyD_TgVBvX5B9REpxNx7IUlf1mpLtH_1MF4"  # Substitua pela sua chave de API
+genai.configure(api_key=API_KEY)
 
-# Criar o chatbot
-model = genai.GenerativeModel("gemini-pro")  # Usa o modelo Gemini
+# Escolha o modelo
+model = genai.GenerativeModel('gemini-pro')
 
-def chatbot(prompt):
-    response = model.generate_content(prompt)
+# Inicia uma conversa com contexto
+chat = model.start_chat(history=[])
+
+def chatbot(user_input):
+    # Envia a mensagem do usuário para o modelo
+    response = chat.send_message(user_input)
     return response.text
 
-# Loop para interação
-print("Bem-vindo ao chatbot! Digite 'sair' para encerrar.")
-while True:
-    user_input = input("Você: ")
-    if user_input.lower() == "sair":
-        print("Chatbot encerrado!")
-        break
-    resposta = chatbot(user_input)
-    print("Bot:", resposta)
+def main():
+    print("Bem-vindo ao Chatbot com Respostas Contextuais! Digite 'sair' para encerrar.")
+    
+    while True:
+        # Recebe a entrada do usuário
+        user_input = input("Você: ")
+        
+        # Verifica se o usuário quer sair
+        if user_input.lower() == "sair":
+            print("Chatbot: Até logo!")
+            break
+        
+        # Gera a resposta do chatbot
+        response = chatbot(user_input)
+        print(f"Chatbot: {response}")
+
+if __name__ == "__main__":
+    main()
