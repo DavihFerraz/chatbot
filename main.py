@@ -12,26 +12,43 @@ model = genai.GenerativeModel('gemini-pro')
 # Inicia uma conversa com contexto
 chat = model.start_chat(history=[])
 
-def chatbot(user_input):
-    # Envia a mensagem do usuário para o modelo
-    response = chat.send_message(user_input)
-    return response.text
+# Função para enviar mensagem e obter resposta
 
-def main():
-    print("Bem-vindo ao Chatbot com Respostas Contextuais! Digite 'sair' para encerrar.")
-    
-    while True:
-        # Recebe a entrada do usuário
-        user_input = input("Você: ")
-        
-        # Verifica se o usuário quer sair
-        if user_input.lower() == "sair":
-            print("Chatbot: Até logo!")
-            break
-        
-        # Gera a resposta do chatbot
-        response = chatbot(user_input)
-        print(f"Chatbot: {response}")
+def enviar_mensagem():
+    user_input = entrada.get() #Pega a mensagem do campo de entrada
+    if user_input.lower() == 'sair':
+        chat_area.insert(tk.END, "Você: " + user_input + "\n") 
+        chat_area.insert(tk.END, "Chatbot: Até logo! \n")
+        janela.quit() #Fecha a aplicação
+    else:
+        chat_area.insert(tk.END, "Chatbot: 👋 Olá! Como posso ajudar você hoje?\n")
+        chat_area.insert(tk.END, "Você: " + user_input  + "\n")
+        resposta = chat.send_message(user_input).text
+        chat_area.insert(tk.END, "Chatbot: " + resposta + "\n")
+        entrada.delete(0, tk.END) #Limpa o campo de entrada
 
-if __name__ == "__main__":
-    main()
+
+
+
+#Configuração da janela principal
+janela = tk.Tk()
+janela.title("Chatbot com Respostas Contextuais")
+
+#Área de texto para exibir a conversa
+chat_area = scrolledtext.ScrolledText(janela, wrap=tk.WORD, width=50, height=20)
+chat_area.pack(padx=10, pady=10)
+chat_area.config(font=("Arial", 12), bg="#f0f0f0", fg="#333")
+
+
+#Campo de entrada para o usuário digitar
+entrada = tk.Entry(janela, width=40)
+entrada.pack(padx=10, pady=10)
+entrada.config(font=("Arial", 12))
+
+
+#Botão para enviar mensagem
+botao_enviar = tk.Button(janela, text='Enviar', command=enviar_mensagem)
+botao_enviar.pack(padx=10, pady=10)
+
+#Inicia o loop da interface grafica
+janela.mainloop()
